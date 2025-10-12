@@ -1,51 +1,127 @@
-// PayPal Payment Integration
+// Paddle Payment Integration
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize PayPal button
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'blue',
-            shape: 'rect',
-            label: 'paypal'
-        },
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '9.90',
-                        currency_code: 'USD'
-                    },
-                    description: 'ChatGPT Enhancer - Support Development'
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                // Payment successful
-                showPaymentSuccess(details);
+    // Initialize Paddle
+    Paddle.Setup({
+        vendor: 123456, // Replace with your Paddle vendor ID
+        environment: 'production' // Change to 'sandbox' for testing
+    });
+
+    // Create Paddle checkout button
+    const checkoutButton = document.createElement('button');
+    checkoutButton.className = 'paddle-checkout-button';
+    checkoutButton.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <span>Support Development - $9.90</span>
+    `;
+    
+    // Style the button
+    checkoutButton.style.cssText = `
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 20px auto;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    `;
+
+    // Add hover effects
+    checkoutButton.addEventListener('mouseenter', () => {
+        checkoutButton.style.transform = 'translateY(-2px)';
+        checkoutButton.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.4)';
+    });
+
+    checkoutButton.addEventListener('mouseleave', () => {
+        checkoutButton.style.transform = 'translateY(0)';
+        checkoutButton.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+    });
+
+    // Add click handler for Paddle checkout
+    checkoutButton.addEventListener('click', function() {
+        // Show loading state
+        checkoutButton.disabled = true;
+        checkoutButton.innerHTML = `
+            <div style="width: 20px; height: 20px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <span>Processing...</span>
+        `;
+
+        // Open Paddle checkout
+        Paddle.Checkout.open({
+            product: 'YOUR_PRODUCT_ID', // Replace with your Paddle product ID
+            email: '', // Optional: pre-fill email
+            allowQuantity: false,
+            quantity: 1,
+            disableLogout: true,
+            frameTarget: 'checkout',
+            frameInitialHeight: 366,
+            frameStyle: 'width: 100%; min-width: 312px; background-color: transparent; border: none;',
+            eventCallback: function(data) {
+                console.log('Paddle event:', data);
                 
-                // Log payment details (in production, send to your server)
-                console.log('Payment completed:', details);
+                if (data.name === 'checkout.loaded') {
+                    console.log('Checkout loaded');
+                }
                 
-                // Optional: Send payment data to your server
-                // sendPaymentToServer(details);
-            });
-        },
-        onError: function(err) {
-            // Payment failed
-            showPaymentError(err);
-            console.error('Payment error:', err);
-        },
-        onCancel: function(data) {
-            // Payment cancelled
-            showPaymentCancelled();
-            console.log('Payment cancelled:', data);
+                if (data.name === 'checkout.completed') {
+                    // Payment successful
+                    showPaymentSuccess(data);
+                    checkoutButton.disabled = false;
+                    checkoutButton.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <span>Support Development - $9.90</span>
+                    `;
+                }
+                
+                if (data.name === 'checkout.closed') {
+                    // Checkout closed
+                    checkoutButton.disabled = false;
+                    checkoutButton.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <span>Support Development - $9.90</span>
+                    `;
+                }
+            }
+        });
+    });
+
+    // Add spinner animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-    }).render('#paypal-button-container');
+    `;
+    document.head.appendChild(style);
+
+    // Append button to container
+    const container = document.getElementById('paddle-button-container');
+    if (container) {
+        container.appendChild(checkoutButton);
+    }
 });
 
 // Payment success handler
-function showPaymentSuccess(details) {
+function showPaymentSuccess(data) {
     // Create success modal
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
@@ -55,9 +131,9 @@ function showPaymentSuccess(details) {
             <h2>Payment Successful!</h2>
             <p>Thank you for supporting ChatGPT Enhancer development.</p>
             <div class="payment-details">
-                <p><strong>Transaction ID:</strong> ${details.id}</p>
+                <p><strong>Transaction ID:</strong> ${data.data?.transaction_id || 'N/A'}</p>
                 <p><strong>Amount:</strong> $9.90 USD</p>
-                <p><strong>Status:</strong> ${details.status}</p>
+                <p><strong>Status:</strong> Completed</p>
             </div>
             <button onclick="closeModal()" class="close-button">Close</button>
         </div>
@@ -178,12 +254,11 @@ function sendPaymentToServer(details) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            transactionId: details.id,
+            transactionId: details.transaction_id,
             amount: '9.90',
             currency: 'USD',
-            status: details.status,
-            payerEmail: details.payer.email_address,
-            payerName: details.payer.name.given_name + ' ' + details.payer.name.surname
+            status: 'completed',
+            paymentMethod: 'Paddle'
         })
     })
     .then(response => response.json())
