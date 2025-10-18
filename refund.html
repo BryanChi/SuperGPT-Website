@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policy - SuperGPT</title>
+    <meta name="description" content="Refund Policy for SuperGPT - Browser extension that enhances ChatGPT with powerful features.">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo - removed bg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo - removed bg.png">
+    <link rel="shortcut icon" type="image/png" href="images/logo - removed bg.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/logo - removed bg.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .refund-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+            line-height: 1.7;
+        }
+        
+        .refund-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .refund-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .refund-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .refund-date {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        
+        .refund-content {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .refund-section {
+            margin-bottom: 40px;
+        }
+        
+        .refund-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+        
+        .section-content {
+            color: #4b5563;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-content p {
+            margin-bottom: 16px;
+        }
+        
+        .section-content ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .section-content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            margin: 24px 0;
+        }
+        
+        .success-highlight {
+            background: #d1fae5;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            margin: 24px 0;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 32px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .contact-info {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-top: 32px;
+        }
+        
+        .contact-info h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .contact-info p {
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .process-steps {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin: 24px 0;
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .process-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            background: #3b82f6;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .step-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 768px) {
+            .refund-container {
+                padding: 100px 16px 60px;
+            }
+            
+            .refund-title {
+                font-size: 2rem;
+            }
+            
+            .refund-content {
+                padding: 32px 24px;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .refund-title {
+                color: #e2e8f0;
+            }
+            
+            .refund-subtitle {
+                color: #94a3b8;
+            }
+            
+            .refund-date {
+                color: #64748b;
+            }
+            
+            .refund-content {
+                background: #1e293b;
+                border-color: #475569;
+            }
+            
+            .section-title {
+                color: #e2e8f0;
+                border-bottom-color: #475569;
+            }
+            
+            .section-content {
+                color: #cbd5e1;
+            }
+            
+            .highlight {
+                background: #451a03;
+                border-left-color: #f59e0b;
+            }
+            
+            .success-highlight {
+                background: #064e3b;
+                border-left-color: #10b981;
+            }
+            
+            .contact-info {
+                background: #334155;
+                border-color: #475569;
+            }
+            
+            .contact-info h4 {
+                color: #e2e8f0;
+            }
+            
+            .contact-info p {
+                color: #94a3b8;
+            }
+            
+            .process-steps {
+                background: #334155;
+                border-color: #475569;
+            }
+            
+            .process-step {
+                background: #1e293b;
+            }
+            
+            .step-title {
+                color: #e2e8f0;
+            }
+            
+            .step-description {
+                color: #94a3b8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/logo - removed bg.png" alt="SuperGPT" class="logo-image">
+                <span class="logo-text">SuperGPT</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#demo">Demo</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="index.html#install" class="cta-button">Install Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="refund-container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Home
+        </a>
+        
+        <div class="refund-header">
+            <h1 class="refund-title">Refund Policy</h1>
+            <p class="refund-subtitle">SuperGPT Browser Extension</p>
+            <p class="refund-date">Last updated: December 2024</p>
+        </div>
+        
+        <div class="refund-content">
+            <div class="success-highlight">
+                <strong>7-Day Money-Back Guarantee:</strong> We offer a full refund within 7 days of your purchase if you're not completely satisfied with SuperGPT.
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">1. Refund Eligibility</h2>
+                <div class="section-content">
+                    <p>You are eligible for a full refund if:</p>
+                    <ul>
+                        <li>You request a refund within 7 days of your purchase</li>
+                        <li>The extension does not work as described</li>
+                        <li>You experience technical issues that we cannot resolve</li>
+                        <li>You are not satisfied with the extension's functionality</li>
+                    </ul>
+                    <p>Refunds are processed to the original payment method used for the purchase.</p>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">2. How to Request a Refund</h2>
+                <div class="section-content">
+                    <p>To request a refund, please follow these simple steps:</p>
+                    
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Contact Our Support Team</div>
+                                <div class="step-description">Send an email to support@supergpt.com with your purchase details</div>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Provide Purchase Information</div>
+                                <div class="step-description">Include your order number, email address, and reason for refund</div>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Review and Processing</div>
+                                <div class="step-description">We'll review your request and process the refund within 2-3 business days</div>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Confirmation</div>
+                                <div class="step-description">You'll receive confirmation once the refund is processed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">3. Refund Processing Time</h2>
+                <div class="section-content">
+                    <p>Refund processing times vary by payment method:</p>
+                    <ul>
+                        <li><strong>Credit/Debit Cards:</strong> 3-5 business days</li>
+                        <li><strong>PayPal:</strong> 1-3 business days</li>
+                        <li><strong>Bank Transfers:</strong> 5-10 business days</li>
+                    </ul>
+                    <p>Please note that processing times may vary depending on your financial institution.</p>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">4. Non-Refundable Items</h2>
+                <div class="section-content">
+                    <p>The following items are not eligible for refunds:</p>
+                    <ul>
+                        <li>Refund requests made after 7 days from purchase</li>
+                        <li>Extensions that have been modified or tampered with</li>
+                        <li>Purchases made through unauthorized third-party sellers</li>
+                        <li>Refunds requested due to changes in personal preferences</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">5. Extension Access After Refund</h2>
+                <div class="section-content">
+                    <p>After a successful refund:</p>
+                    <ul>
+                        <li>Your access to premium features will be revoked</li>
+                        <li>The extension will revert to free functionality</li>
+                        <li>You may continue using basic features at no cost</li>
+                        <li>You can repurchase the extension at any time</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">6. Dispute Resolution</h2>
+                <div class="section-content">
+                    <p>If you disagree with our refund decision:</p>
+                    <ul>
+                        <li>Contact our support team for further review</li>
+                        <li>Provide additional documentation if requested</li>
+                        <li>We will conduct a thorough investigation</li>
+                        <li>Final decisions will be communicated within 5 business days</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h2 class="section-title">7. Legal Rights</h2>
+                <div class="section-content">
+                    <p>This refund policy does not affect your statutory rights as a consumer under applicable law.</p>
+                    <p>If you are located in a jurisdiction that provides additional consumer protection rights, those rights remain in effect.</p>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <h4>Contact Information</h4>
+                <p>For refund requests or questions about this policy, please contact us:</p>
+                <p>Email: support@supergpt.com</p>
+                <p>Subject Line: "Refund Request - [Your Order Number]"</p>
+                <p>Website: <a href="index.html" style="color: #3b82f6;">supergpt.com</a></p>
+                <p>Response Time: We typically respond within 24 hours during business days.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="images/logo - removed bg.png" alt="SuperGPT" class="logo-image">
+                        <span class="logo-text">SuperGPT</span>
+                    </div>
+                    <p class="footer-description">
+                        Transform your ChatGPT experience with powerful features and intuitive design.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="index.html#features">Features</a>
+                        <a href="index.html#demo">Demo</a>
+                        <a href="index.html#pricing">Pricing</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="#">Documentation</a>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="refund.html">Refund Policy</a>
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 SuperGPT. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,6 +1,6 @@
-# Video Assets for ChatGPT Enhancer Landing Page
+# Video Assets for SuperGPT Landing Page
 
-This folder contains demonstration videos showcasing the features of ChatGPT Enhancer.
+This folder contains demonstration videos showcasing the features of SuperGPT.
 
 ## Required Video Files
 

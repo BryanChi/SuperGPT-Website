@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "SuperGPT",
+  "version": "1.0.0",
+  "description": "Transform your ChatGPT experience with color-coded backgrounds, smart prompt navigation, typography controls, and intelligent features.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "logo/logo-16.png",
+    "32": "logo/logo-32.png",
+    "48": "logo/logo-64.png",
+    "128": "logo/logo-128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SuperGPT",
+    "default_icon": {
+      "16": "logo/logo-16.png",
+      "32": "logo/logo-32.png",
+      "48": "logo/logo-64.png",
+      "128": "logo/logo-128.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["logo/*"],
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ]
+    }
+  ]
+}

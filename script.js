@@ -1,4 +1,4 @@
-// ChatGPT Enhancer Landing Page JavaScript
+// SuperGPT Landing Page JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality

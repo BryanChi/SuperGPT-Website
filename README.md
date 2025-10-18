@@ -1,10 +1,10 @@
-# ChatGPT Enhancer Landing Page
+# SuperGPT Landing Page
 
-A modern, responsive landing page for the ChatGPT Enhancer Chrome extension.
+A modern, responsive landing page for the SuperGPT Chrome extension.
 
 ## Overview
 
-This landing page showcases the features of ChatGPT Enhancer, a Chrome extension that enhances the ChatGPT experience with:
+This landing page showcases the features of SuperGPT, a Chrome extension that enhances the ChatGPT experience with:
 
 - **Color-coded Backgrounds**: Automatically color-code conversation pairs
 - **Smart Prompt Navigation**: Floating bubble interface for easy prompt jumping
@@ -157,4 +157,4 @@ For questions or issues:
 
 ---
 
-**ChatGPT Enhancer** - Transform your ChatGPT experience with powerful features and intuitive design.
+**SuperGPT** - Transform your ChatGPT experience with powerful features and intuitive design.

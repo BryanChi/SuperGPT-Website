@@ -129,7 +129,7 @@ function showPaymentSuccess(data) {
         <div class="modal-content">
             <div class="success-icon">✅</div>
             <h2>Payment Successful!</h2>
-            <p>Thank you for supporting ChatGPT Enhancer development.</p>
+            <p>Thank you for supporting SuperGPT development.</p>
             <div class="payment-details">
                 <p><strong>Transaction ID:</strong> ${data.data?.transaction_id || 'N/A'}</p>
                 <p><strong>Amount:</strong> $9.90 USD</p>
