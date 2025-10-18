@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - SuperGPT</title>
+    <meta name="description" content="Privacy Policy for SuperGPT - Browser extension that enhances ChatGPT with powerful features. We do not collect any user data.">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo - removed bg.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo - removed bg.png">
+    <link rel="shortcut icon" type="image/png" href="images/logo - removed bg.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/logo - removed bg.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .privacy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 80px;
+            line-height: 1.7;
+        }
+        
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .privacy-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        
+        .privacy-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .privacy-date {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        
+        .privacy-content {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .privacy-section {
+            margin-bottom: 40px;
+        }
+        
+        .privacy-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+        
+        .section-content {
+            color: #4b5563;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-content p {
+            margin-bottom: 16px;
+        }
+        
+        .section-content ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .section-content li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            background: #d1fae5;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            margin: 24px 0;
+        }
+        
+        .no-data-highlight {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+            margin: 24px 0;
+            text-align: center;
+        }
+        
+        .no-data-highlight h3 {
+            color: #92400e;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .no-data-highlight p {
+            color: #92400e;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 32px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .contact-info {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-top: 32px;
+        }
+        
+        .contact-info h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .contact-info p {
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .data-table th {
+            background: #f8fafc;
+            color: #374151;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .privacy-container {
+                padding: 100px 16px 60px;
+            }
+            
+            .privacy-title {
+                font-size: 2rem;
+            }
+            
+            .privacy-content {
+                padding: 32px 24px;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .data-table {
+                font-size: 0.875rem;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px 12px;
+            }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .privacy-title {
+                color: #e2e8f0;
+            }
+            
+            .privacy-subtitle {
+                color: #94a3b8;
+            }
+            
+            .privacy-date {
+                color: #64748b;
+            }
+            
+            .privacy-content {
+                background: #1e293b;
+                border-color: #475569;
+            }
+            
+            .section-title {
+                color: #e2e8f0;
+                border-bottom-color: #475569;
+            }
+            
+            .section-content {
+                color: #cbd5e1;
+            }
+            
+            .highlight {
+                background: #064e3b;
+                border-left-color: #10b981;
+            }
+            
+            .no-data-highlight {
+                background: #451a03;
+                border-left-color: #f59e0b;
+            }
+            
+            .no-data-highlight h3 {
+                color: #fbbf24;
+            }
+            
+            .no-data-highlight p {
+                color: #fbbf24;
+            }
+            
+            .contact-info {
+                background: #334155;
+                border-color: #475569;
+            }
+            
+            .contact-info h4 {
+                color: #e2e8f0;
+            }
+            
+            .contact-info p {
+                color: #94a3b8;
+            }
+            
+            .data-table {
+                background: #1e293b;
+            }
+            
+            .data-table th {
+                background: #334155;
+                color: #e2e8f0;
+                border-bottom-color: #475569;
+            }
+            
+            .data-table td {
+                color: #cbd5e1;
+                border-bottom-color: #334155;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="images/logo - removed bg.png" alt="SuperGPT" class="logo-image">
+                <span class="logo-text">SuperGPT</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#demo">Demo</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="index.html#install" class="cta-button">Install Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="privacy-container">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Home
+        </a>
+        
+        <div class="privacy-header">
+            <h1 class="privacy-title">Privacy Policy</h1>
+            <p class="privacy-subtitle">SuperGPT Browser Extension</p>
+            <p class="privacy-date">Last updated: December 2024</p>
+        </div>
+        
+        <div class="privacy-content">
+            <div class="no-data-highlight">
+                <h3>🔒 Zero Data Collection</h3>
+                <p>SuperGPT does not collect, store, or transmit any personal data or user information.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">1. Our Privacy Commitment</h2>
+                <div class="section-content">
+                    <p>At SuperGPT, we are committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our browser extension.</p>
+                    <p><strong>Key Principle:</strong> SuperGPT operates entirely locally on your device and does not collect any personal data.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">2. Information We Do NOT Collect</h2>
+                <div class="section-content">
+                    <p>SuperGPT does not collect, store, or transmit any of the following:</p>
+                    <ul>
+                        <li>Your ChatGPT conversations or prompts</li>
+                        <li>Personal information (name, email, etc.)</li>
+                        <li>Browser history or browsing data</li>
+                        <li>Device information or identifiers</li>
+                        <li>Location data</li>
+                        <li>Usage analytics or tracking data</li>
+                        <li>Any other personal or sensitive information</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">3. How SuperGPT Works</h2>
+                <div class="section-content">
+                    <p>SuperGPT operates entirely on your local device:</p>
+                    <ul>
+                        <li>All processing happens in your browser</li>
+                        <li>No data is sent to external servers</li>
+                        <li>Settings and preferences are stored locally</li>
+                        <li>The extension only modifies the ChatGPT interface visually</li>
+                    </ul>
+                    <div class="highlight">
+                        <strong>Local Operation:</strong> SuperGPT works by adding CSS styles and JavaScript functionality to the ChatGPT webpage. No data leaves your device.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">4. Data Storage</h2>
+                <div class="section-content">
+                    <p>Any data stored by SuperGPT is kept locally on your device:</p>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data Type</th>
+                                <th>Storage Location</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Extension Settings</td>
+                                <td>Browser Local Storage</td>
+                                <td>Remember your preferences</td>
+                            </tr>
+                            <tr>
+                                <td>Color Preferences</td>
+                                <td>Browser Local Storage</td>
+                                <td>Customize appearance</td>
+                            </tr>
+                            <tr>
+                                <td>Typography Settings</td>
+                                <td>Browser Local Storage</td>
+                                <td>Font size preferences</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>All stored data is local to your device and can be deleted by uninstalling the extension or clearing your browser data.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">5. Third-Party Services</h2>
+                <div class="section-content">
+                    <p>SuperGPT does not integrate with any third-party services that collect data. However, please note:</p>
+                    <ul>
+                        <li>SuperGPT enhances the ChatGPT website, which has its own privacy policy</li>
+                        <li>We are not affiliated with OpenAI or ChatGPT</li>
+                        <li>We do not have access to your ChatGPT account or conversations</li>
+                        <li>Any data collection by ChatGPT is governed by OpenAI's privacy policy</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">6. Browser Permissions</h2>
+                <div class="section-content">
+                    <p>SuperGPT requires minimal browser permissions:</p>
+                    <ul>
+                        <li><strong>Active Tab Access:</strong> To modify the ChatGPT interface</li>
+                        <li><strong>Storage Permission:</strong> To save your local preferences</li>
+                    </ul>
+                    <p>These permissions are necessary for the extension to function and do not involve data collection or transmission.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">7. Children's Privacy</h2>
+                <div class="section-content">
+                    <p>SuperGPT does not collect any personal information from anyone, including children under 13. Since we collect no data, we comply with all children's privacy regulations.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">8. Changes to This Policy</h2>
+                <div class="section-content">
+                    <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
+                    <p>Since we don't collect data, changes to this policy will not affect your privacy rights.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h2 class="section-title">9. Your Rights</h2>
+                <div class="section-content">
+                    <p>Since SuperGPT doesn't collect personal data, you have complete control:</p>
+                    <ul>
+                        <li>No data to access, correct, or delete</li>
+                        <li>No data portability concerns</li>
+                        <li>Complete privacy by default</li>
+                        <li>Uninstall the extension to remove all local data</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <h4>Contact Information</h4>
+                <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                <p>Email: privacy@supergpt.com</p>
+                <p>Website: <a href="index.html" style="color: #3b82f6;">supergpt.com</a></p>
+                <p>Response Time: We typically respond within 24 hours during business days.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="images/logo - removed bg.png" alt="SuperGPT" class="logo-image">
+                        <span class="logo-text">SuperGPT</span>
+                    </div>
+                    <p class="footer-description">
+                        Transform your ChatGPT experience with powerful features and intuitive design.
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="index.html#features">Features</a>
+                        <a href="index.html#demo">Demo</a>
+                        <a href="index.html#pricing">Pricing</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="#">Documentation</a>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                        <a href="refund.html">Refund Policy</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 SuperGPT. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

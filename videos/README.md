@@ -8,7 +8,6 @@ This folder contains demonstration videos showcasing the features of SuperGPT.
 - `color-coding-demo.mov` - Shows color-coded conversation backgrounds in action
 - `navigation-demo.mov` - Demonstrates the floating prompt navigation bubble
 - `typography-demo.mov` - Shows typography customization features
-- `followup-demo.mov` - Demonstrates AI follow-up suggestions
 - `pinning-demo.mov` - Shows chat pinning functionality
 - `controls-demo.mov` - Demonstrates per-prompt controls
 
