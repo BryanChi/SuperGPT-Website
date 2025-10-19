@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functionality
     initScrollAnimations();
     initVideoControls();
+    initVideoAutoplay();
     initSmoothScrolling();
     initNavbarScroll();
     initInteractiveElements();
@@ -48,27 +49,77 @@ function initVideoControls() {
     videos.forEach(video => {
         const container = video.closest('.feature-video, .demo-video');
         const overlay = container?.querySelector('.video-overlay');
+        const controls = container?.querySelector('.video-controls');
+        const progressBar = container?.querySelector('.video-progress-bar');
+        const progressFilled = container?.querySelector('.video-progress-filled');
+        const progressHandle = container?.querySelector('.video-progress-handle');
+        const currentTimeEl = container?.querySelector('.current-time');
+        const durationEl = container?.querySelector('.duration');
         
+        // Format time helper function
+        const formatTime = (seconds) => {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        };
+        
+        // Update progress bar
+        const updateProgress = () => {
+            if (video.duration) {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressFilled.style.width = `${progress}%`;
+                progressHandle.style.left = `${progress}%`;
+                currentTimeEl.textContent = formatTime(video.currentTime);
+            }
+        };
+        
+        // Update duration when metadata is loaded
+        const updateDuration = () => {
+            if (video.duration) {
+                durationEl.textContent = formatTime(video.duration);
+            }
+        };
+        
+        // Seek to position on progress bar click
+        const seekToPosition = (event) => {
+            if (!video.duration) return;
+            
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            const newTime = percentage * video.duration;
+            
+            video.currentTime = newTime;
+        };
+        
+        // Event listeners
         if (overlay) {
             // Click overlay to play/pause video
             overlay.addEventListener('click', () => {
                 if (video.paused) {
-                    video.play();
-                    overlay.style.opacity = '0';
+                    video.play().then(() => {
+                        overlay.style.opacity = '0';
+                    }).catch(error => {
+                        console.log('Play failed:', error);
+                    });
                 } else {
                     video.pause();
                     overlay.style.opacity = '1';
                 }
             });
             
-            // Show overlay when video is paused
+            // Show overlay when video is paused (but not for autoplay)
             video.addEventListener('pause', () => {
-                overlay.style.opacity = '1';
+                // Only show overlay if video was manually paused
+                if (!video.dataset.autoplayPaused) {
+                    overlay.style.opacity = '1';
+                }
             });
             
             // Hide overlay when video is playing
             video.addEventListener('play', () => {
                 overlay.style.opacity = '0';
+                video.dataset.autoplayPaused = 'false';
             });
             
             // Show overlay when video ends
@@ -76,6 +127,39 @@ function initVideoControls() {
                 overlay.style.opacity = '1';
             });
         }
+        
+        // Progress bar interactions
+        if (progressBar) {
+            progressBar.addEventListener('click', seekToPosition);
+            
+            // Drag functionality for progress handle
+            let isDragging = false;
+            
+            progressHandle.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && video.duration) {
+                    const rect = progressBar.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const percentage = Math.max(0, Math.min(1, mouseX / rect.width));
+                    const newTime = percentage * video.duration;
+                    
+                    video.currentTime = newTime;
+                }
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+        }
+        
+        // Video event listeners
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('loadedmetadata', updateDuration);
+        video.addEventListener('durationchange', updateDuration);
         
         // Add loading state
         video.addEventListener('loadstart', () => {
@@ -85,6 +169,63 @@ function initVideoControls() {
         video.addEventListener('canplay', () => {
             container?.classList.remove('loading');
         });
+        
+        // Initialize duration if already loaded
+        if (video.readyState >= 1) {
+            updateDuration();
+        }
+    });
+}
+
+// Video Autoplay on Scroll
+function initVideoAutoplay() {
+    const videos = document.querySelectorAll('video');
+    
+    // Intersection Observer options
+    const observerOptions = {
+        threshold: 0.5, // Trigger when 50% of video is visible
+        rootMargin: '0px 0px -10% 0px' // Start playing slightly before fully in view
+    };
+    
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const video = entry.target;
+            const container = video.closest('.feature-video, .demo-video');
+            const overlay = container?.querySelector('.video-overlay');
+            
+            if (entry.isIntersecting) {
+                // Video is in view - try to play
+                const playPromise = video.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Video started playing successfully
+                        if (overlay) {
+                            overlay.style.opacity = '0';
+                        }
+                    }).catch(error => {
+                        // Autoplay failed (likely due to browser policy)
+                        console.log('Autoplay prevented:', error);
+                        // Keep overlay visible for manual play
+                        if (overlay) {
+                            overlay.style.opacity = '1';
+                        }
+                    });
+                }
+            } else {
+                // Video is out of view - pause it
+                video.dataset.autoplayPaused = 'true';
+                video.pause();
+                if (overlay) {
+                    overlay.style.opacity = '1';
+                }
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all videos
+    videos.forEach(video => {
+        videoObserver.observe(video);
     });
 }
 
