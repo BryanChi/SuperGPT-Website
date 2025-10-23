@@ -1,160 +1,180 @@
-# SuperGPT Landing Page
+# SuperGPT Website
 
-A modern, responsive landing page for the SuperGPT Chrome extension.
-
-## Overview
-
-This landing page showcases the features of SuperGPT, a Chrome extension that enhances the ChatGPT experience with:
-
-- **Color-coded Backgrounds**: Automatically color-code conversation pairs
-- **Smart Prompt Navigation**: Floating bubble interface for easy prompt jumping
-- **Typography Controls**: Customize prompt appearance with bold text and font sizes
-- **AI Follow-up Suggestions**: Intelligent follow-up prompt suggestions
-- **Chat Pinning**: Pin important conversations to the top
-- **Per-Prompt Controls**: Navigate between prompts directly from messages
+This is the official website for SuperGPT, a Chrome extension that enhances ChatGPT with powerful features including PayPal payment integration and license verification system.
 
 ## Features
 
-### 🎨 Modern Design
-- Clean, professional interface
-- Responsive design for all devices
-- Dark/light mode support
-- Smooth animations and transitions
-
-### 📱 Fully Responsive
-- Mobile-first approach
-- Optimized for tablets and desktops
-- Touch-friendly interactions
-
-### 🎥 Video Integration
-- Feature demonstration videos
-- Interactive video controls
-- Fallback support for different formats
-
-### ⚡ Performance Optimized
-- Fast loading times
-- Optimized images and assets
-- Smooth scrolling and animations
-
-## File Structure
-
-```
-website/
-├── index.html          # Main landing page
-├── styles.css          # Styles and responsive design
-├── script.js           # Interactive functionality
-├── videos/             # Video assets folder
-│   ├── README.md       # Video specifications
-│   └── [video files]   # Demo videos and posters
-└── README.md           # This file
-```
+- Color-coded conversation backgrounds
+- Smart prompt navigation
+- Typography controls
+- Chat pinning
+- Per-prompt controls
+- Customizable color schemes
+- Automatic theme adaptation
+- Remove "Limit Reached" messages
+- PayPal payment integration
+- License key generation and verification
+- Email delivery system
 
 ## Getting Started
 
 ### Prerequisites
-- Modern web browser
-- Local web server (for development)
+
+- Node.js (version 14 or higher)
+- npm or yarn
+- PayPal Developer Account (for payment processing)
 
 ### Installation
 
-1. **Clone or download** the website files
-2. **Add video assets** to the `videos/` folder (see `videos/README.md`)
-3. **Serve the files** using a local web server:
-
+1. Clone the repository:
 ```bash
-# Using Python
-python -m http.server 8000
-
-# Using Node.js
-npx serve .
-
-# Using PHP
-php -S localhost:8000
+git clone https://github.com/yourusername/supergpt-website.git
+cd supergpt-website
 ```
 
-4. **Open** `http://localhost:8000` in your browser
+2. Install dependencies:
+```bash
+npm install
+```
 
-### Development
+3. Set up PayPal integration:
+   - Create a PayPal Developer account
+   - Create a new application
+   - Get your Client ID
+   - Update the PayPal Client ID in `payment.html`:
+   ```html
+   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD&intent=capture"></script>
+   ```
 
-The website uses vanilla HTML, CSS, and JavaScript - no build process required.
+4. Start the development server:
+```bash
+npm run dev
+```
 
-#### Key Files
-- `index.html`: Main page structure and content
-- `styles.css`: All styling, responsive design, and animations
-- `script.js`: Interactive features and animations
+5. Open your browser and visit `http://localhost:3000`
 
-#### Customization
+### Production Deployment
 
-1. **Colors**: Update CSS custom properties in `styles.css`
-2. **Content**: Modify text and images in `index.html`
-3. **Features**: Add or remove feature sections as needed
-4. **Videos**: Replace placeholder videos with actual demos
+1. Build the project:
+```bash
+npm run build
+```
 
-## Browser Support
+2. Start the production server:
+```bash
+npm start
+```
 
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
+## Project Structure
 
-## Performance
+```
+supergpt-website/
+├── index.html              # Main landing page
+├── payment.html            # Payment confirmation page
+├── verify.html             # License verification page
+├── styles.css              # Main stylesheet
+├── script.js               # Main JavaScript functionality
+├── payment-processor.js    # PayPal payment processing
+├── license-verifier.js     # License verification system
+├── api.js                  # API utilities
+├── server.js               # Node.js backend server
+├── package.json            # Node.js dependencies
+├── images/                 # Website images
+├── videos/                 # Feature demonstration videos
+└── README.md               # This file
+```
 
-- **Lighthouse Score**: 95+ (Performance, Accessibility, Best Practices, SEO)
-- **Core Web Vitals**: Optimized for LCP, FID, and CLS
-- **Mobile Performance**: Optimized for mobile devices
+## API Endpoints
 
-## SEO Features
+### Payment Processing
+- `POST /api/process-payment` - Process PayPal payment and generate license
+- `POST /api/send-license-email` - Send license key via email
 
-- Semantic HTML structure
-- Meta tags and descriptions
-- Open Graph tags
-- Structured data markup
-- Fast loading times
+### License Verification
+- `POST /api/verify-license` - Verify license key
+- `GET /api/license/:key` - Get license information
 
-## Accessibility
+### Admin (Optional)
+- `GET /api/admin/licenses` - List all licenses
+- `GET /api/admin/payments` - List all payments
 
-- WCAG 2.1 AA compliant
-- Keyboard navigation support
-- Screen reader friendly
-- High contrast support
-- Focus indicators
+## PayPal Integration
 
-## Deployment
+The website integrates with PayPal for secure payment processing:
 
-### Static Hosting
-The website can be deployed to any static hosting service:
+1. User clicks "Get SuperGPT Now" button
+2. Redirects to payment confirmation page
+3. PayPal button is rendered
+4. User completes payment via PayPal
+5. Payment is processed and license key is generated
+6. License key is sent to user's email
+7. User can verify license on the verification page
 
-- **Netlify**: Drag and drop deployment
-- **Vercel**: Git-based deployment
-- **GitHub Pages**: Free hosting for public repos
-- **AWS S3**: Scalable static hosting
+## License System
 
-### CDN Integration
-For better performance, consider using a CDN:
+### License Key Format
+License keys follow the format: `SGPT-XXXX-XXXX-XXXX`
 
-- Cloudflare
-- AWS CloudFront
-- KeyCDN
+### License Verification Process
+1. User enters license key on verification page
+2. System validates license key format
+3. Checks license status in database
+4. Returns verification result
+5. If valid, user can download and activate extension
+
+### Demo License Keys
+For testing purposes, these demo license keys are available:
+- `SGPT-DEMO-2024-DEMO`
+- `SGPT-TEST-2024-TEST`
+
+## Email System
+
+The system includes email functionality for:
+- Sending license keys after purchase
+- Sending verification confirmations
+- Sending support notifications
+
+*Note: In the current implementation, email sending is simulated. For production, integrate with a service like SendGrid, Mailgun, or AWS SES.*
+
+## Security Considerations
+
+- License keys are generated with cryptographic checksums
+- Payment data is processed securely through PayPal
+- License verification includes multiple validation layers
+- All API endpoints include error handling and validation
+
+## Customization
+
+### Styling
+- Modify `styles.css` for custom styling
+- All colors and fonts can be customized
+- Responsive design is included
+
+### Functionality
+- Update `script.js` for additional frontend features
+- Modify `server.js` for backend changes
+- Add new API endpoints as needed
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test across different browsers
+4. Test thoroughly
 5. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details.
 
 ## Support
 
-For questions or issues:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation
+For support, please contact:
+- Email: support@supergpt.com
+- GitHub Issues: [Create an issue](https://github.com/yourusername/supergpt-website/issues)
 
----
+## License
 
-**SuperGPT** - Transform your ChatGPT experience with powerful features and intuitive design.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- PayPal for payment processing
+- Chrome Extension API for extension functionality
+- OpenAI for ChatGPT platform
