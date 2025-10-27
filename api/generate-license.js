@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     const { email, adminKey } = req.body;
 
     // Simple admin authentication (replace with proper auth in production)
-    const ADMIN_KEY = process.env.ADMIN_KEY || 'your-secret-admin-key';
+    const ADMIN_KEY = '99cf9244775553d93b97691da41c808507f80f375b31200b8026ab9b5afc4b0a';
     
     if (adminKey !== ADMIN_KEY) {
       return res.status(401).json({ 

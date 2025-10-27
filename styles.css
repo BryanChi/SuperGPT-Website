@@ -1815,6 +1815,12 @@ body {
     }
 }
 
+@media (max-width: 900px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 480px) {
     .container {
         padding: 0 16px;
