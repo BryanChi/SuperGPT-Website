@@ -1,20 +1,7 @@
 // Vercel Serverless Function: License Verification API
 // This endpoint validates license keys sent from the Chrome extension
 
-// TODO: Replace this with your actual license database
-// For production, use Vercel KV, MongoDB, PostgreSQL, or another database
-const LICENSES_DB = process.env.LICENSES_DB 
-  ? JSON.parse(process.env.LICENSES_DB) 
-  : [
-    // Example licenses - replace with your actual license data
-    // {
-    //   key: 'SGPT-EXAMPLE-EXAMPLE-XXXX',
-    //   email: 'user@example.com',
-    //   expiresAt: '2034-12-31T23:59:59.000Z',
-    //   status: 'active',
-    //   createdAt: '2024-01-01T00:00:00.000Z'
-    // }
-  ];
+import { kv } from '@vercel/kv';
 
 export default async function handler(req, res) {
   // Enable CORS for Chrome extension requests
@@ -111,19 +98,13 @@ export default async function handler(req, res) {
   }
 }
 
-// Helper function to load licenses from storage
+// Helper function to load licenses from Vercel KV
 async function loadLicenses() {
   try {
-    // In production, replace this with your actual database query
-    // Examples:
-    // - Vercel KV: const { kv } = require('@vercel/kv');
-    // - MongoDB: const client = await MongoClient.connect(uri);
-    // - PostgreSQL: const client = await pool.connect();
-    
-    // For now, return the in-memory database from environment variable
-    return LICENSES_DB;
+    const licenses = await kv.get('licenses');
+    return licenses || [];
   } catch (error) {
-    console.error('Error loading licenses:', error);
+    console.error('Error loading licenses from KV:', error);
     return [];
   }
 }

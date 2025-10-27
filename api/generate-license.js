@@ -1,6 +1,8 @@
 // Vercel Serverless Function: Generate License Key
 // This endpoint generates new license keys (admin use)
 
+import { kv } from '@vercel/kv';
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -98,31 +100,25 @@ function computeChecksumBase36(input) {
   return Math.abs(hash).toString(36).toUpperCase().substring(0, 4);
 }
 
-// Save license to storage
+// Save license to Vercel KV
 async function saveLicense(license) {
   try {
-    // In production, replace this with your actual database save
-    // For now, we'll use environment variable updates
-    
-    // Get existing licenses
-    const existingLicenses = process.env.LICENSES_DB 
-      ? JSON.parse(process.env.LICENSES_DB) 
-      : [];
+    // Get existing licenses from KV
+    const existingLicenses = await kv.get('licenses') || [];
     
     // Add new license
     existingLicenses.push(license);
     
-    // Update environment variable (this won't persist in serverless)
-    // In production, use a database instead
-    process.env.LICENSES_DB = JSON.stringify(existingLicenses);
+    // Save back to KV
+    await kv.set('licenses', existingLicenses);
     
-    console.log(`License saved: ${license.key} for ${license.email}`);
+    console.log(`License saved to KV: ${license.key} for ${license.email}`);
     
     // TODO: Send email to user with license key
     // await sendLicenseEmail(license.email, license.key);
     
   } catch (error) {
-    console.error('Error saving license:', error);
+    console.error('Error saving license to KV:', error);
     throw error;
   }
 }
