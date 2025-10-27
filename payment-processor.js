@@ -138,12 +138,11 @@ function initializePayPal() {
 }
 
 function processSuccessfulPayment(details) {
-    // Generate license key
-    const licenseKey = generateLicenseKey();
     paypalPurchaseCompleted = true;
     
     // Get customer email from PayPal details
     const customerEmail = details.payer?.email_address || 'unknown@example.com';
+    const payerName = details.payer?.name?.given_name + ' ' + details.payer?.name?.surname;
     
     console.log('Processing payment:', {
         transactionId: details.id,
@@ -152,29 +151,31 @@ function processSuccessfulPayment(details) {
         currency: details.purchase_units[0]?.amount?.currency_code || 'USD'
     });
     
-    // Send payment data to backend
+    // Send payment data to webhook API to generate license
     sendPaymentToBackend({
         transactionId: details.id,
-        licenseKey: licenseKey,
-        customerEmail: customerEmail,
         amount: details.purchase_units[0]?.amount?.value || '9.90',
         currency: details.purchase_units[0]?.amount?.currency_code || 'USD',
-        status: 'completed',
-        paypalDetails: details
-    }).then(() => {
-        // Show success modal with license key
-        showSuccessModal(licenseKey, customerEmail);
+        status: details.status || 'completed',
+        payerEmail: customerEmail,
+        payerName: payerName
+    }).then(data => {
+        // Server generated license key
+        const licenseKey = data.license?.key;
         
-        // Send email with license key
-        sendLicenseEmail(customerEmail, licenseKey);
+        if (licenseKey) {
+            // Show success modal with license key
+            showSuccessModal(licenseKey, customerEmail);
+        } else {
+            showError('Payment successful but license generation failed. Please contact support.');
+        }
         
         // Hide loading state
         hideLoadingState();
         
     }).catch(error => {
         console.error('Backend error:', error);
-        // Still show success modal even if backend fails
-        showSuccessModal(licenseKey, customerEmail);
+        showError('Payment successful but license generation failed. Please contact support with transaction ID: ' + details.id);
         hideLoadingState();
     });
 }
@@ -199,7 +200,8 @@ function generateChecksum(str) {
 }
 
 function sendPaymentToBackend(paymentData) {
-    return fetch(`${API_URL}/api/process-payment`, {
+    // Send to our payment webhook API
+    return fetch('https://www.superwebextensions.com/api/payment-webhook', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

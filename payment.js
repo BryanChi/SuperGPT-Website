@@ -1,127 +1,51 @@
-// Paddle Payment Integration
+// PayPal Payment Integration
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Paddle
-    Paddle.Setup({
-        vendor: 123456, // Replace with your Paddle vendor ID
-        environment: 'production' // Change to 'sandbox' for testing
-    });
-
-    // Create Paddle checkout button
-    const checkoutButton = document.createElement('button');
-    checkoutButton.className = 'paddle-checkout-button';
-    checkoutButton.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-        </svg>
-        <span>Support Development - $9.90</span>
-    `;
-    
-    // Style the button
-    checkoutButton.style.cssText = `
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        color: white;
-        border: none;
-        padding: 16px 32px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 20px auto;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-    `;
-
-    // Add hover effects
-    checkoutButton.addEventListener('mouseenter', () => {
-        checkoutButton.style.transform = 'translateY(-2px)';
-        checkoutButton.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.4)';
-    });
-
-    checkoutButton.addEventListener('mouseleave', () => {
-        checkoutButton.style.transform = 'translateY(0)';
-        checkoutButton.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
-    });
-
-    // Add click handler for Paddle checkout
-    checkoutButton.addEventListener('click', function() {
-        // Show loading state
-        checkoutButton.disabled = true;
-        checkoutButton.innerHTML = `
-            <div style="width: 20px; height: 20px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <span>Processing...</span>
-        `;
-
-        // Open Paddle checkout
-        Paddle.Checkout.open({
-            product: 'YOUR_PRODUCT_ID', // Replace with your Paddle product ID
-            email: '', // Optional: pre-fill email
-            allowQuantity: false,
-            quantity: 1,
-            disableLogout: true,
-            frameTarget: 'checkout',
-            frameInitialHeight: 366,
-            frameStyle: 'width: 100%; min-width: 312px; background-color: transparent; border: none;',
-            eventCallback: function(data) {
-                console.log('Paddle event:', data);
+    // Initialize PayPal button
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color: 'blue',
+            shape: 'rect',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '9.90',
+                        currency_code: 'USD'
+                    },
+                    description: 'SuperGPT - Support Development'
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                // Payment successful
+                showPaymentSuccess(details);
                 
-                if (data.name === 'checkout.loaded') {
-                    console.log('Checkout loaded');
-                }
+                // Log payment details
+                console.log('Payment completed:', details);
                 
-                if (data.name === 'checkout.completed') {
-                    // Payment successful
-                    showPaymentSuccess(data);
-                    checkoutButton.disabled = false;
-                    checkoutButton.innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                            <path d="M2 17l10 5 10-5"/>
-                            <path d="M2 12l10 5 10-5"/>
-                        </svg>
-                        <span>Support Development - $9.90</span>
-                    `;
-                }
-                
-                if (data.name === 'checkout.closed') {
-                    // Checkout closed
-                    checkoutButton.disabled = false;
-                    checkoutButton.innerHTML = `
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                            <path d="M2 17l10 5 10-5"/>
-                            <path d="M2 12l10 5 10-5"/>
-                        </svg>
-                        <span>Support Development - $9.90</span>
-                    `;
-                }
-            }
-        });
-    });
-
-    // Add spinner animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+                // Send payment data to server to generate license
+                sendPaymentToServer(details);
+            });
+        },
+        onError: function(err) {
+            // Payment failed
+            showPaymentError(err);
+            console.error('Payment error:', err);
+        },
+        onCancel: function(data) {
+            // Payment cancelled
+            showPaymentCancelled();
+            console.log('Payment cancelled:', data);
         }
-    `;
-    document.head.appendChild(style);
-
-    // Append button to container
-    const container = document.getElementById('paddle-button-container');
-    if (container) {
-        container.appendChild(checkoutButton);
-    }
+    }).render('#paypal-button-container');
 });
 
 // Payment success handler
-function showPaymentSuccess(data) {
+function showPaymentSuccess(details) {
     // Create success modal
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
@@ -131,9 +55,9 @@ function showPaymentSuccess(data) {
             <h2>Payment Successful!</h2>
             <p>Thank you for supporting SuperGPT development.</p>
             <div class="payment-details">
-                <p><strong>Transaction ID:</strong> ${data.data?.transaction_id || 'N/A'}</p>
+                <p><strong>Transaction ID:</strong> ${details.id}</p>
                 <p><strong>Amount:</strong> $9.90 USD</p>
-                <p><strong>Status:</strong> Completed</p>
+                <p><strong>Status:</strong> ${details.status}</p>
             </div>
             <button onclick="closeModal()" class="close-button">Close</button>
         </div>
@@ -246,26 +170,80 @@ function closeModal() {
     }
 }
 
-// Optional: Send payment data to server
+// Send payment data to server to generate license
 function sendPaymentToServer(details) {
-    fetch('/api/payment-success', {
+    const API_URL = 'https://www.superwebextensions.com/api/payment-webhook';
+    
+    fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            transactionId: details.transaction_id,
+            transactionId: details.id,
             amount: '9.90',
             currency: 'USD',
-            status: 'completed',
-            paymentMethod: 'Paddle'
+            status: details.status,
+            payerEmail: details.payer.email_address,
+            payerName: details.payer.name.given_name + ' ' + details.payer.name.surname
         })
     })
     .then(response => response.json())
     .then(data => {
         console.log('Payment data sent to server:', data);
+        
+        // Display license key to user
+        if (data.success && data.license) {
+            showLicenseKey(data.license.key);
+        }
     })
     .catch(error => {
         console.error('Error sending payment data:', error);
     });
+}
+
+// Show license key to user after payment
+function showLicenseKey(licenseKey) {
+    const licenseSection = document.createElement('div');
+    licenseSection.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        z-index: 10001;
+        max-width: 500px;
+        text-align: center;
+    `;
+    
+    licenseSection.innerHTML = `
+        <h2 style="color: #1f2937; margin-bottom: 20px;">Your License Key</h2>
+        <p style="color: #6b7280; margin-bottom: 20px;">
+            Thank you for your purchase! Your license key has been sent to your email.
+        </p>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="font-family: monospace; font-size: 18px; font-weight: bold; color: #3b82f6; word-break: break-all;">
+                ${licenseKey}
+            </p>
+        </div>
+        <button onclick="closeLicenseModal()" class="close-button" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            Copy & Close
+        </button>
+    `;
+    
+    document.body.appendChild(licenseSection);
+    
+    // Copy to clipboard functionality
+    const button = licenseSection.querySelector('button');
+    button.onclick = function() {
+        navigator.clipboard.writeText(licenseKey).then(() => {
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                document.body.removeChild(licenseSection);
+            }, 1000);
+        });
+    };
 }
