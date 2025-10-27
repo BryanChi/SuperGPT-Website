@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Admin - SuperGPT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { margin-bottom: 30px; color: #1f2937; }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+        .section h2 {
+            margin-bottom: 15px;
+            color: #3b82f6;
+            font-size: 20px;
+        }
+        input, button {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        button:hover { background: #2563eb; }
+        button.danger { background: #ef4444; }
+        button.danger:hover { background: #dc2626; }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .license-list {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .license-item {
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .license-info {
+            flex: 1;
+        }
+        .license-key {
+            font-family: monospace;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 5px;
+        }
+        .license-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-revoked { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SuperGPT License Management</h1>
+        
+        <!-- Generate License -->
+        <div class="section">
+            <h2>Generate New License</h2>
+            <input type="email" id="email-input" placeholder="Customer email" />
+            <button onclick="generateLicense()">Generate License</button>
+            <div id="generate-result"></div>
+        </div>
+        
+        <!-- Revoke License -->
+        <div class="section">
+            <h2>Revoke License</h2>
+            <input type="text" id="revoke-key-input" placeholder="License key (e.g., SGPT-XXXX-XXXX-XXXX)" />
+            <button class="danger" onclick="revokeLicense()">Revoke License</button>
+            <div id="revoke-result"></div>
+        </div>
+        
+        <!-- Verify License -->
+        <div class="section">
+            <h2>Verify License</h2>
+            <input type="text" id="verify-key-input" placeholder="License key" />
+            <button onclick="verifyLicense()">Verify License</button>
+            <div id="verify-result"></div>
+        </div>
+        
+        <!-- All Licenses -->
+        <div class="section">
+            <h2>All Licenses</h2>
+            <button onclick="loadAllLicenses()">Refresh List</button>
+            <div id="licenses-list" class="license-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_KEY = '99cf9244775553d93b97691da41c808507f80f375b31200b8026ab9b5afc4b0a';
+        const API_BASE = 'https://www.superwebextensions.com/api';
+
+        async function generateLicense() {
+            const email = document.getElementById('email-input').value;
+            const resultDiv = document.getElementById('generate-result');
+            
+            try {
+                const response = await fetch(`${API_BASE}/generate-license`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, adminKey: ADMIN_KEY })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ License Generated!\n\nKey: ${data.license.key}\nEmail: ${data.license.email}\nExpires: ${new Date(data.license.expiresAt).toLocaleString()}`;
+                    document.getElementById('email-input').value = '';
+                    loadAllLicenses();
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function revokeLicense() {
+            const key = document.getElementById('revoke-key-input').value;
+            const resultDiv = document.getElementById('revoke-result');
+            
+            try {
+                const response = await fetch(`${API_BASE}/revoke-license`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ licenseKey: key, adminKey: ADMIN_KEY })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ License Revoked!\n\nKey: ${data.license.key}\nStatus: ${data.license.status}`;
+                    document.getElementById('revoke-key-input').value = '';
+                    loadAllLicenses();
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function verifyLicense() {
+            const key = document.getElementById('verify-key-input').value;
+            const resultDiv = document.getElementById('verify-result');
+            
+            try {
+                const response = await fetch(`${API_BASE}/verify-license`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ licenseKey: key, extensionVersion: '0.1.0', timestamp: Date.now() })
+                });
+                const data = await response.json();
+                
+                if (data.valid) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ License Valid!\n\nEmail: ${data.license.email}\nStatus: ${data.license.status}\nExpires: ${new Date(data.license.expiresAt).toLocaleString()}`;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Invalid: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
+        }
+
+        async function loadAllLicenses() {
+            const listDiv = document.getElementById('licenses-list');
+            listDiv.innerHTML = '<p>Loading...</p>';
+            
+            // Note: You'll need to create a list-licenses endpoint or manually check Redis
+            listDiv.innerHTML = '<p style="color: #6b7280;">Note: This requires a list-licenses API endpoint. Use individual verify to check licenses.</p>';
+        }
+
+        // Load licenses on page load
+        loadAllLicenses();
+    </script>
+</body>
+</html>
+
