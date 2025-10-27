@@ -1,7 +1,21 @@
 // Vercel Serverless Function: Generate License Key
 // This endpoint generates new license keys (admin use)
 
-import { kv } from '@vercel/kv';
+import { createClient } from 'redis';
+
+// Initialize Redis client
+const redisClient = createClient({
+  url: process.env.REDIS_URL || 'redis://default:57lO1epamjie9Z9vepa8SmXUE00eCxZn@redis-11872.c322.us-east-1-2.ec2.redns.redis-cloud.com:11872'
+});
+
+// Connect to Redis (reuse connection in serverless)
+let redisReady = false;
+async function ensureRedisConnection() {
+  if (!redisReady) {
+    await redisClient.connect();
+    redisReady = true;
+  }
+}
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -100,25 +114,28 @@ function computeChecksumBase36(input) {
   return Math.abs(hash).toString(36).toUpperCase().substring(0, 4);
 }
 
-// Save license to Vercel KV
+// Save license to Redis
 async function saveLicense(license) {
   try {
-    // Get existing licenses from KV
-    const existingLicenses = await kv.get('licenses') || [];
+    await ensureRedisConnection();
+    
+    // Get existing licenses from Redis
+    const licensesData = await redisClient.get('licenses');
+    const existingLicenses = licensesData ? JSON.parse(licensesData) : [];
     
     // Add new license
     existingLicenses.push(license);
     
-    // Save back to KV
-    await kv.set('licenses', existingLicenses);
+    // Save back to Redis
+    await redisClient.set('licenses', JSON.stringify(existingLicenses));
     
-    console.log(`License saved to KV: ${license.key} for ${license.email}`);
+    console.log(`License saved to Redis: ${license.key} for ${license.email}`);
     
     // TODO: Send email to user with license key
     // await sendLicenseEmail(license.email, license.key);
     
   } catch (error) {
-    console.error('Error saving license to KV:', error);
+    console.error('Error saving license to Redis:', error);
     throw error;
   }
 }

@@ -1,7 +1,21 @@
 // Vercel Serverless Function: License Verification API
 // This endpoint validates license keys sent from the Chrome extension
 
-import { kv } from '@vercel/kv';
+import { createClient } from 'redis';
+
+// Initialize Redis client
+const redisClient = createClient({
+  url: process.env.REDIS_URL || 'redis://default:57lO1epamjie9Z9vepa8SmXUE00eCxZn@redis-11872.c322.us-east-1-2.ec2.redns.redis-cloud.com:11872'
+});
+
+// Connect to Redis (reuse connection in serverless)
+let redisReady = false;
+async function ensureRedisConnection() {
+  if (!redisReady) {
+    await redisClient.connect();
+    redisReady = true;
+  }
+}
 
 export default async function handler(req, res) {
   // Enable CORS for Chrome extension requests
@@ -98,13 +112,14 @@ export default async function handler(req, res) {
   }
 }
 
-// Helper function to load licenses from Vercel KV
+// Helper function to load licenses from Redis
 async function loadLicenses() {
   try {
-    const licenses = await kv.get('licenses');
-    return licenses || [];
+    await ensureRedisConnection();
+    const licenses = await redisClient.get('licenses');
+    return licenses ? JSON.parse(licenses) : [];
   } catch (error) {
-    console.error('Error loading licenses from KV:', error);
+    console.error('Error loading licenses from Redis:', error);
     return [];
   }
 }
