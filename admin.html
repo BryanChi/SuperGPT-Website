@@ -219,8 +219,80 @@
             const listDiv = document.getElementById('licenses-list');
             listDiv.innerHTML = '<p>Loading...</p>';
             
-            // Note: You'll need to create a list-licenses endpoint or manually check Redis
-            listDiv.innerHTML = '<p style="color: #6b7280;">Note: This requires a list-licenses API endpoint. Use individual verify to check licenses.</p>';
+            try {
+                const response = await fetch(`${API_BASE}/list-licenses`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ adminKey: ADMIN_KEY })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.licenses.length === 0) {
+                        listDiv.innerHTML = '<p style="color: #6b7280;">No licenses found.</p>';
+                        return;
+                    }
+                    
+                    let html = `<div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 6px;">
+                        <strong>Total:</strong> ${data.total} | 
+                        <span style="color: #065f46;"><strong>Active:</strong> ${data.active}</span> | 
+                        <span style="color: #991b1b;"><strong>Revoked:</strong> ${data.revoked}</span> | 
+                        <span style="color: #92400e;"><strong>Expired:</strong> ${data.expired}</span>
+                    </div>`;
+                    
+                    data.licenses.forEach(license => {
+                        const status = license.status === 'active' ? 'status-active' : 'status-revoked';
+                        const expiresAt = new Date(license.expiresAt);
+                        const isExpired = expiresAt <= new Date() && license.status === 'active';
+                        const statusText = isExpired ? 'Expired' : license.status;
+                        
+                        html += `
+                            <div class="license-item">
+                                <div class="license-info">
+                                    <div class="license-key">${license.key}</div>
+                                    <div style="font-size: 12px; color: #6b7280;">
+                                        Email: ${license.email} | 
+                                        Status: <span class="license-status ${status}">${statusText}</span> | 
+                                        Expires: ${expiresAt.toLocaleDateString()}
+                                    </div>
+                                </div>
+                                <button class="danger" onclick="revokeLicenseKey('${license.key}')">Revoke</button>
+                            </div>
+                        `;
+                    });
+                    
+                    listDiv.innerHTML = html;
+                } else {
+                    listDiv.innerHTML = `<p style="color: #991b1b;">Error: ${data.error}</p>`;
+                }
+            } catch (error) {
+                listDiv.innerHTML = `<p style="color: #991b1b;">Error loading licenses: ${error.message}</p>`;
+            }
+        }
+
+        async function revokeLicenseKey(key) {
+            const resultDiv = document.getElementById('revoke-result');
+            
+            try {
+                const response = await fetch(`${API_BASE}/revoke-license`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ licenseKey: key, adminKey: ADMIN_KEY })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ License Revoked!\n\nKey: ${data.license.key}`;
+                    loadAllLicenses();
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ Error: ${error.message}`;
+            }
         }
 
         // Load licenses on page load
