@@ -2,9 +2,9 @@
 const config = {
     // PayPal Configuration
     paypal: {
-        clientId: 'AW1bo3Og1P_xaSVEzcv3R-umo6OPXCMmnaBgdl7Xk3GoTQacCwuKxJqOmz4Vnirl9VOhVIguwbLUfKoC',
+        clientId: 'AVVzspvoyrBZYv6BhuaPGPNTECuA0Vc0KLzfrcdAiFyv72yJQIqv7loska0lLEYgYfYd1F1a9fInrTF7',
         clientSecret: 'EBSBs5tENoExQ0JIqwXglQmuoT5G6O8LLCVKQrvBnpnrULOvu68upryKZ0-yg9TuorXjAInWtCxEnLDp',
-        mode: 'sandbox', // Change to 'live' for production
+        mode: 'live', // Live mode for production
         currency: 'USD'
     },
     
